@@ -343,12 +343,23 @@ As added to `blocks/text.liquid` (other blocks are identical except for the diff
   reads `--header-actions-font-size` only exists at ≥750px, so a mobile size would have no effect. Not added.
 - **Header menu "Submenu size"** (`menu_font_style`, small/medium/large by tokens) is shared by desktop and
   drawer; no mobile variant in this change (team decision).
-- Blocks that expose only `type_preset` (accordion, review, popup-link, `_cart-title`,
-  `_featured-product-price`, `_blog-post-info-text`) have no custom size and therefore no mobile size. The
-  footer `menu` block is the one preset-only block that did get mobile sizes, by explicit team request.
+- **Preset-only blocks are still not covered.** Nine blocks expose a type preset but no size in px, so they
+  have neither a desktop nor a mobile size: `accordion`, `review`, `popup-link`, `_cart-title`,
+  `_featured-product-price`, `_blog-post-info-text`, `comparison-slider` (`text_preset`), `disclosures`
+  (`heading_preset`, `disclosure_heading_preset`) and `email-signup` (`heading_preset`, `input_type_preset`,
+  `button_type_preset`). The footer `menu` block was preset-only too and did get both sizes, by explicit team
+  request — so the rule for this fork is "every block with a px size, plus the footer menu", not "every block
+  with typography". Extending the same Size / Mobile size pair to the nine above is the obvious follow-up if
+  the team wants full consistency.
+- `_inline-text` and `_inline-collection-title` render typography controls but never declare `font_size` in
+  their schema, so their `custom-font-size` condition can never be true: their size is not configurable on any
+  breakpoint. Pre-existing in Horizon, untouched here, and worth a separate ticket if the collection-link text
+  needs sizing.
 - Tablet has no dedicated control; the single breakpoint is Horizon's 749px.
-- `_inline-text` and `_inline-collection-title` reference `font_size` but do not declare it in their
-  schema; they are untouched and unaffected.
+- Coverage was verified by sweeping every `{% schema %}` in `blocks/` and `sections/` for size-like setting
+  ids: every typographic size setting in the theme now has a mobile counterpart except `actions_font_size`
+  (above). The remaining matches are `logo`/`spacer` sizes, which are not type and already ship Horizon's own
+  mobile controls.
 
 ## Upstream sync note
 
