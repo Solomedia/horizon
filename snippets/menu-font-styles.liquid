@@ -3,10 +3,16 @@
 
   @param {object} settings - The block settings object containing typography settings.
   @param {string} menu_type - The menu type: 'drawer' or 'mega_menu'.
+
+  Also emits the optional `--menu-top-level-font-size-mobile` variable from
+  `settings.type_font_primary_size_mobile` when set, used to override the top-level
+  menu item font size on mobile (drawer) below 750px.
 {%- enddoc -%}
 
 --menu-top-level-font-family: var(--font-{{ settings.type_font_primary_link }}--family);
---menu-top-level-font-size-desktop: {{ settings.type_font_primary_size }}; --menu-top-level-font-style: var(--font-
+--menu-top-level-font-size-desktop: {{ settings.type_font_primary_size }};
+{% if settings.type_font_primary_size_mobile != blank %}--menu-top-level-font-size-mobile: {{ settings.type_font_primary_size_mobile }}; {% endif %}
+--menu-top-level-font-style: var(--font-
 {{- settings.type_font_primary_link -}}
 --style); --menu-top-level-font-weight: var(--font-
 {{- settings.type_font_primary_link -}}
