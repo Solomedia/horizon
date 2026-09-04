@@ -40,7 +40,9 @@
       style="
         --spacing--size: {{ block_settings.menu_spacing }}px;
         {% render 'spacing-style', settings: block_settings %}
+        {% if block_settings.heading_size != blank %}--menu-heading-font-size: {{ block_settings.heading_size }};{% endif %}
         {% if block_settings.heading_size_mobile != blank %}--menu-heading-font-size-mobile: {{ block_settings.heading_size_mobile }};{% endif %}
+        {% if block_settings.link_size != blank %}--menu-link-font-size: {{ block_settings.link_size }};{% endif %}
         {% if block_settings.link_size_mobile != blank %}--menu-link-font-size-mobile: {{ block_settings.link_size_mobile }};{% endif %}
       "
       {% if show_as_accordion == false %}
@@ -48,7 +50,7 @@
       {% endif %}
       {{ block.shopify_attributes }}
     >
-      <summary class="menu__heading{% if heading == blank and menu.title == blank %} menu__heading--empty{% endif %}{% if block_settings.heading_size_mobile != blank %} menu__heading--mobile-size{% endif %} {{ block_settings.heading_preset }}">
+      <summary class="menu__heading{% if heading == blank and menu.title == blank %} menu__heading--empty{% endif %}{% if block_settings.heading_size != blank %} menu__heading--custom-size{% endif %}{% if block_settings.heading_size_mobile != blank %} menu__heading--mobile-size{% endif %} {{ block_settings.heading_preset }}">
         <span class="menu__heading__default">{{ heading | default: menu.title }}</span>
         <span class="menu__heading__accordion">
           {{ heading | default: menu.title }}
@@ -73,7 +75,7 @@
         {% if menu %}
           <ul class="list-unstyled">
             {% for link in menu.links %}
-              <li class="menu__item{% if block_settings.link_size_mobile != blank %} menu__item--mobile-size{% endif %} {{ block_settings.link_preset }}">
+              <li class="menu__item{% if block_settings.link_size != blank %} menu__item--custom-size{% endif %}{% if block_settings.link_size_mobile != blank %} menu__item--mobile-size{% endif %} {{ block_settings.link_preset }}">
                 <a href="{{ link.url }}">
                   {{ link.title }}{% if link.data_sharing_opt_out_icon %}{{ link.data_sharing_opt_out_icon }}{% endif %}
                 </a>
@@ -117,6 +119,16 @@
 
   .menu__heading__accordion {
     display: none;
+  }
+
+  .menu__details .menu__heading.menu__heading--custom-size,
+  .menu__details .menu__heading.menu__heading--custom-size > * {
+    font-size: var(--menu-heading-font-size);
+  }
+
+  .menu__details .menu__item.menu__item--custom-size,
+  .menu__details .menu__item.menu__item--custom-size > * {
+    font-size: var(--menu-link-font-size);
   }
 
   @media screen and (max-width: 749px) {
@@ -279,6 +291,62 @@
     },
     {
       "type": "select",
+      "id": "heading_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
       "id": "heading_size_mobile",
       "label": "t:settings.size_mobile",
       "options": [
@@ -372,6 +440,62 @@
         }
       ],
       "default": "paragraph"
+    },
+    {
+      "type": "select",
+      "id": "link_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        }
+      ],
+      "default": ""
     },
     {
       "type": "select",
