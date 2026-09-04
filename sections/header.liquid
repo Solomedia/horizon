@@ -232,6 +232,9 @@
   {% liquid
     assign localization_font = '--menu-localization-font: var(--font-[localization_font]--family); ' | replace: '[localization_font]', section.settings.localization_font
     assign localization_font_size = '--menu-localization-font-size: [localization_font_size]; ' | replace: '[localization_font_size]', section.settings.localization_font_size
+    if section.settings.localization_font_size_mobile != blank
+      assign localization_font_size = localization_font_size | append: '--menu-localization-font-size-mobile: ' | append: section.settings.localization_font_size_mobile | append: '; '
+    endif
     assign color_shadow = '--color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));'
     assign form_style = localization_font | append: localization_font_size | append: color_shadow
   %}
@@ -1446,6 +1449,38 @@
         }
       ],
       "default": "1rem"
+    },
+    {
+      "type": "select",
+      "id": "localization_font_size_mobile",
+      "label": "t:settings.size_mobile",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        }
+      ],
+      "default": ""
     },
     {
       "type": "select",

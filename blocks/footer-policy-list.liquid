@@ -25,7 +25,7 @@
         class="
           policy_list list-unstyled
           custom-typography
-          {% if block.settings.font_size != "" %}custom-font-size{% endif %}
+          {% if block.settings.font_size != "" or block.settings.font_size_mobile != blank %}custom-font-size{% endif %}
         "
       >
         {%- for policy in shop.policies -%}
@@ -51,6 +51,12 @@
     cursor: pointer;
     font-size: var(--font-size, 0.75rem);
     text-transform: var(--text-transform, none);
+  }
+
+  @media screen and (max-width: 749px) {
+    .policy-list-trigger {
+      font-size: var(--font-size-mobile, var(--font-size, 0.75rem));
+    }
   }
 
   .policy_list {
@@ -189,6 +195,38 @@
         }
       ],
       "default": "0.75rem"
+    },
+    {
+      "type": "select",
+      "id": "font_size_mobile",
+      "label": "t:settings.size_mobile",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        }
+      ],
+      "default": ""
     },
     {
       "type": "select",

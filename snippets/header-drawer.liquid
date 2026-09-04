@@ -614,8 +614,12 @@
             endif
 
             assign localization_font = '--menu-localization-font: var(--font-[localization_font]--family); ' | replace: '[localization_font]', section.settings.localization_font
+            assign localization_font_size_mobile = ''
+            if section.settings.localization_font_size_mobile != blank
+              assign localization_font_size_mobile = '--menu-localization-font-size-mobile: ' | append: section.settings.localization_font_size_mobile | append: '; '
+            endif
             assign color_shadow = '--color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));'
-            assign form_style = localization_font | append: color_shadow
+            assign form_style = localization_font | append: localization_font_size_mobile | append: color_shadow
           %}
           {% if show_language and show_country == false %}
             <div class="menu-drawer__localization color-custom-popover">
@@ -1099,6 +1103,10 @@
     color: var(--menu-top-level-font-color);
     justify-content: space-between;
 
+    @media screen and (max-width: 749px) {
+      font-size: var(--menu-top-level-font-size-mobile, var(--menu-top-level-font-size));
+    }
+
     &:hover {
       color: var(--menu-top-level-font-color);
     }
@@ -1386,6 +1394,11 @@
     background-size: cover;
     margin-inline-end: 4px;
     position: relative;
+
+    @media screen and (max-width: 749px) {
+      width: var(--menu-localization-font-size-mobile, var(--menu-localization-font-size, var(--icon-size-sm)));
+      height: var(--menu-localization-font-size-mobile, var(--menu-localization-font-size, var(--icon-size-sm)));
+    }
   }
 
   .drawer-localization__button .icon-flag::after {
@@ -1422,6 +1435,10 @@
   .menu-drawer__localization:not(drawer-localization-component) .language-selector {
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
+
+    @media screen and (max-width: 749px) {
+      font-size: var(--menu-localization-font-size-mobile, var(--menu-localization-font-size));
+    }
   }
 
   .menu-drawer__localization .language-selector.h5 {
@@ -1448,6 +1465,12 @@
 
   .drawer-localization__button--label.h6 {
     font-family: var(--menu-localization-font);
+  }
+
+  .drawer-localization__button .drawer-localization__button--label.h6 {
+    @media screen and (max-width: 749px) {
+      font-size: var(--menu-localization-font-size-mobile, var(--font-h6--size));
+    }
   }
 
   .drawer-localization img {
