@@ -61,7 +61,7 @@ flowchart LR
 | `snippets/menu-font-styles.liquid` | Modified | Emits `--menu-top-level-font-size-mobile` when the setting is not blank |
 | `snippets/header-drawer.liquid` | Modified | Nested `@media (max-width: 749px)` on `.menu-drawer__menu-item--mainlist` (menu) and on the drawer localization rules (`.language-selector`, flag, button label); adds the localization mobile variable to the drawer `form_style` |
 | `sections/header.liquid` | Modified | `localization_font_size_mobile` setting; emits `--menu-localization-font-size-mobile` next to the desktop variable |
-| `blocks/menu.liquid` | Modified | `heading_size_mobile` + `link_size_mobile` settings (footer menu); inline variables, modifier classes and 749px rules |
+| `blocks/menu.liquid` | Modified | `heading_size` / `heading_size_mobile` + `link_size` / `link_size_mobile` settings (footer menu); inline variables, modifier classes, desktop rules and 749px rules |
 
 No locale files were changed: the setting reuses the existing keys `t:settings.size_mobile` ("Mobile size")
 and `t:options.default` ("Default"), present in all 57 `locales/*.schema.json`.
@@ -212,24 +212,32 @@ used the global `.h6` class (country variant).
 
 **File:** `blocks/menu.liquid` (used by `sections/footer.liquid`; two instances in `sections/footer-group.json`)
 
-This block has no custom size at all: its heading and links take a **preset** (`heading_preset`,
+Stock Horizon gives this block no custom size at all: its heading and links take a **preset** (`heading_preset`,
 `link_preset` → `paragraph`, `h1`…`h6`) applied as a global class, so the size comes from the global type
-scale on every breakpoint. Two mobile-only settings were added so the footer can shrink on small screens
-without touching the preset:
+scale on every breakpoint. Four settings were added so the footer can be sized like a text block, without
+touching the preset:
 
 | Setting | Type | Default | Options | Description |
 |---------|------|---------|---------|-------------|
-| `heading_size_mobile` | `select` | `""` (Default = preset size) | 10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48px | Menu heading size at ≤749px |
-| `link_size_mobile` | `select` | `""` (Default = preset size) | same list | Menu link size at ≤749px |
+| `heading_size` | `select` | `""` (Default = preset size) | 10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48px | Menu heading size (all breakpoints) |
+| `heading_size_mobile` | `select` | `""` (Default = same as desktop) | same list | Menu heading size at ≤749px |
+| `link_size` | `select` | `""` (Default = preset size) | same list | Menu link size (all breakpoints) |
+| `link_size_mobile` | `select` | `""` (Default = same as desktop) | same list | Menu link size at ≤749px |
 
-Both sit right below their preset in the editor (label "Mobile size", key `t:settings.size_mobile`), so the
-order tells which one they belong to. Mechanism:
+In the editor each group reads Preset → Size → Mobile size (labels reuse `t:settings.size` and
+`t:settings.size_mobile`), mirroring the text blocks: Mobile size on Default inherits whatever desktop
+renders, custom size or preset. Mechanism:
 
-- The root `<details class="menu__details">` emits `--menu-heading-font-size-mobile` / `--menu-link-font-size-mobile`
-  inline when the setting is not blank.
-- The `<summary class="menu__heading">` gets `menu__heading--mobile-size` and each `<li class="menu__item">`
-  gets `menu__item--mobile-size`, only when its setting is set. Because the variable is consumed through a
-  modifier class, an unset setting leaves no rule to apply — the preset class keeps full control.
+- The root `<details class="menu__details">` emits `--menu-heading-font-size`, `--menu-heading-font-size-mobile`,
+  `--menu-link-font-size` and `--menu-link-font-size-mobile` inline, each only when its setting is not blank.
+- The `<summary class="menu__heading">` gets `menu__heading--custom-size` / `menu__heading--mobile-size` and each
+  `<li class="menu__item">` gets `menu__item--custom-size` / `menu__item--mobile-size`, only when the matching
+  setting is set. Because the variables are consumed through modifier classes, an unset setting leaves no rule
+  to apply — the preset class keeps full control.
+- Desktop rules sit before the block's `@media screen and (max-width: 749px)` block:
+  `.menu__details .menu__heading.menu__heading--custom-size, … > * { font-size: var(--menu-heading-font-size); }`
+  (and the `.menu__item` pair). The mobile rules below have the same specificity and come later in the
+  stylesheet, so at ≤749px a set mobile size wins over a set desktop size.
 - Inside the block's existing `@media screen and (max-width: 749px)`:
   `.menu__details .menu__heading.menu__heading--mobile-size, .menu__details .menu__heading.menu__heading--mobile-size > * { font-size: var(--menu-heading-font-size-mobile); }`
   and the equivalent pair for `.menu__item`. The `> *` half is required: the global preset rule
@@ -320,8 +328,8 @@ As added to `blocks/text.liquid` (other blocks are identical except for the diff
       errors (overflow of a single long word is expected, as on desktop).
 - [ ] Header menu: with `type_font_primary_size_mobile` unset the drawer's top-level items stay at 28px at 390;
       with 20px set they measure 20px at 390 and the desktop mega menu keeps `type_font_primary_size` at 1440.
-- [ ] Footer menu: with the presets untouched and both mobile settings unset, heading and links keep their preset
-      size at 390; with heading 20px / links 10px set they measure 20px / 10px at 390 and the preset sizes at 1440.
+- [ ] Footer menu: with all four size settings unset, heading and links keep their preset size at 390 and 1440;
+      Size 18px / 16px → 18px / 16px at both widths; adding Mobile size 12px / 10px → 12px / 10px at 390 only.
 - [ ] Header localization: with `localization_font_size_mobile` unset the drawer selector keeps its current size
       (12px `.h6` label in the country variant); with 10px set it measures 10px at 390 while the desktop
       dropdown keeps `localization_font_size` at 1440.

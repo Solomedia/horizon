@@ -21,7 +21,7 @@ releases (merged via Shopify's `horizon-update-*` PRs); agency work lands throug
 
 | Change | Files | Since |
 |---|---|---|
-| Mobile font sizes: `font_size_mobile` on every block that exposes `font_size` (≤749px override, default = same as desktop); `type_font_primary_size_mobile` on the header menu block (drawer top-level items); `localization_font_size_mobile` on the header section (drawer selector); `heading_size_mobile` / `link_size_mobile` on the footer `menu` block — see [docs/mobile-font-size.md](docs/mobile-font-size.md) | 16 block schemas, `sections/header.liquid`, `snippets/typography-style.liquid`, `snippets/text.liquid`, `snippets/menu-font-styles.liquid`, `snippets/header-drawer.liquid`, `assets/base.css` (`.custom-font-size` media query) | 2026-09 |
+| Mobile font sizes: `font_size_mobile` on every block that exposes `font_size` (≤749px override, default = same as desktop); `type_font_primary_size_mobile` on the header menu block (drawer top-level items); `localization_font_size_mobile` on the header section (drawer selector); `heading_size`/`heading_size_mobile` and `link_size`/`link_size_mobile` on the footer `menu` block — see [docs/mobile-font-size.md](docs/mobile-font-size.md) | 16 block schemas, `sections/header.liquid`, `snippets/typography-style.liquid`, `snippets/text.liquid`, `snippets/menu-font-styles.liquid`, `snippets/header-drawer.liquid`, `assets/base.css` (`.custom-font-size` media query) | 2026-09 |
 
 Feature docs live in `docs/` (template: `docs/_TEMPLATE.md`). Every new setting or block added to this fork
 gets one.
